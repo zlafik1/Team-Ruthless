@@ -38,13 +38,52 @@
             min-height: 100vh;
             overflow-x: hidden;
             line-height: 1.6;
+            position: relative;
         }
 
-        /* ===== CONTAINER ===== */
+        /* ===== SNOW EFFECT ===== */
+        #snow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .snowflake {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* ===== CONTENT OVER SNOW ===== */
         .container {
             max-width: 1000px;
             margin: 0 auto;
             padding: 0 20px;
+            position: relative;
+            z-index: 2;
         }
 
         /* ===== HEADER ===== */
@@ -80,7 +119,8 @@
 
         .nav-btn {
             padding: 12px 28px;
-            background: transparent;
+            background: rgba(17, 17, 24, 0.85);
+            backdrop-filter: blur(10px);
             border: 1px solid var(--border);
             border-radius: 8px;
             color: var(--text-secondary);
@@ -122,7 +162,8 @@
 
         /* ===== HOME SECTION ===== */
         .welcome-card {
-            background: var(--bg-secondary);
+            background: rgba(17, 17, 24, 0.85);
+            backdrop-filter: blur(10px);
             border-radius: 16px;
             padding: 50px;
             margin-bottom: 60px;
@@ -185,6 +226,47 @@
             margin-top: 8px;
         }
 
+        /* ===== IMPORTANT REQUIREMENTS ===== */
+        .important-requirements {
+            background: rgba(255, 74, 106, 0.1);
+            border: 1px solid rgba(255, 74, 106, 0.3);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+
+        .requirements-title {
+            color: #ff4a6a;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .requirement-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .requirement-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .req-icon {
+            color: #ff4a6a;
+            font-size: 1.2rem;
+            margin-top: 2px;
+        }
+
+        .req-text {
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+
         /* ===== APPLICATION SECTION ===== */
         .form-container {
             max-width: 600px;
@@ -192,7 +274,8 @@
         }
 
         .form-card {
-            background: var(--bg-secondary);
+            background: rgba(17, 17, 24, 0.85);
+            backdrop-filter: blur(10px);
             border-radius: 16px;
             padding: 50px;
             border: 1px solid var(--border);
@@ -216,6 +299,10 @@
             font-weight: 500;
             margin-bottom: 10px;
             font-size: 1rem;
+        }
+
+        .form-label .required {
+            color: #ff4a6a;
         }
 
         .form-input {
@@ -264,6 +351,18 @@
             background: var(--accent);
             border-color: var(--accent);
             color: var(--text-primary);
+        }
+
+        .faceit-link {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .faceit-link:hover {
+            color: var(--accent-hover);
+            text-decoration: underline;
         }
 
         .submit-btn {
@@ -414,6 +513,10 @@
     </style>
 </head>
 <body>
+    <!-- Snow Effect -->
+    <div id="snow"></div>
+
+    <!-- Main Content -->
     <div class="container">
         <!-- Header -->
         <header class="header">
@@ -443,6 +546,26 @@
                 <p class="welcome-text">
                     Присоединяйся, если ты разделяешь наши ценности и хочешь достигать результатов в киберспорте.
                 </p>
+                
+                <!-- Важные требования -->
+                <div class="important-requirements">
+                    <h3 class="requirements-title">
+                        <i class="fas fa-exclamation-circle"></i>
+                        Обязательные требования к игрокам:
+                    </h3>
+                    <div class="requirement-item">
+                        <i class="fas fa-user req-icon"></i>
+                        <div class="req-text">Спокойные типы, без излишней эмоциональности и токсичности</div>
+                    </div>
+                    <div class="requirement-item">
+                        <i class="fas fa-clock req-icon"></i>
+                        <div class="req-text">По времени свободны для регулярных тренировок и турниров</div>
+                    </div>
+                    <div class="requirement-item">
+                        <i class="fas fa-users req-icon"></i>
+                        <div class="req-text">Нужны опорники, гл и стар плееры (авик уже занят)</div>
+                    </div>
+                </div>
                 
                 <div class="requirements">
                     <div class="requirement-card">
@@ -479,27 +602,30 @@
                     <h2 class="form-title">Подать заявку</h2>
                     <form id="applicationForm">
                         <div class="form-group">
-                            <label class="form-label">Имя или никнейм *</label>
+                            <label class="form-label">Имя или никнейм <span class="required">*</span></label>
                             <input type="text" class="form-input" id="appName" placeholder="Введите ваше имя" required>
                         </div>
                         
                         <div class="form-group">
-                            <label class="form-label">Возраст *</label>
+                            <label class="form-label">Возраст <span class="required">*</span></label>
                             <input type="number" class="form-input" id="appAge" placeholder="От 15 до 50" required min="15" max="50">
                         </div>
                         
                         <div class="form-group">
-                            <label class="form-label">Часов в CS2 *</label>
+                            <label class="form-label">Часов в CS2 <span class="required">*</span></label>
                             <input type="number" class="form-input" id="appHours" placeholder="Минимум 1000 часов" required min="1000">
                         </div>
                         
                         <div class="form-group">
-                            <label class="form-label">FaceIT ELO *</label>
+                            <label class="form-label">FaceIT ELO <span class="required">*</span></label>
                             <input type="number" class="form-input" id="appElo" placeholder="Минимум 1400" required min="1400">
+                            <div style="margin-top: 8px; font-size: 0.9rem; color: var(--text-secondary);">
+                                Прикрепите ссылку на ваш FaceIT профиль в поле "О себе"
+                            </div>
                         </div>
                         
                         <div class="form-group">
-                            <label class="form-label">Контакт для связи *</label>
+                            <label class="form-label">Контакт для связи <span class="required">*</span></label>
                             <div class="contact-options">
                                 <button type="button" class="contact-btn active" data-type="discord">
                                     <i class="fab fa-discord"></i> Discord
@@ -512,12 +638,31 @@
                         </div>
                         
                         <div class="form-group">
-                            <label class="form-label">О себе</label>
-                            <textarea class="form-input" id="appAbout" rows="3" placeholder="Расскажите о своем опыте..."></textarea>
+                            <label class="form-label">О себе <span class="required">*</span></label>
+                            <textarea class="form-input" id="appAbout" rows="4" placeholder="Расскажите о своем опыте, роли в команде (опорник, гл, стар плеер), вставьте ссылку на FaceIT профиль, и почему вы подходите под наши требования:" required></textarea>
+                            <div style="margin-top: 8px; font-size: 0.9rem; color: var(--text-secondary);">
+                                Обязательно: 1) Ваша роль, 2) Ссылка на FaceIT, 3) Почему вы спокойный тип, 4) Ваша доступность по времени
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Выберите роль <span class="required">*</span></label>
+                            <div class="contact-options">
+                                <button type="button" class="contact-btn" data-role="support">
+                                    <i class="fas fa-shield-alt"></i> Опорник
+                                </button>
+                                <button type="button" class="contact-btn" data-role="igl">
+                                    <i class="fas fa-chess-king"></i> Гл
+                                </button>
+                                <button type="button" class="contact-btn" data-role="star">
+                                    <i class="fas fa-star"></i> Стар плеер
+                                </button>
+                            </div>
+                            <input type="hidden" id="appRole" value="">
                         </div>
                         
                         <button type="submit" class="submit-btn">
-                            Отправить заявку
+                            <i class="fas fa-paper-plane"></i> Отправить заявку
                         </button>
                         <div id="appMessage" class="message"></div>
                     </form>
@@ -543,8 +688,38 @@
     </div>
 
     <script>
-        // Discord Webhook URL (используем предоставленный вебхук)
+        // Discord Webhook URL
         const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1447965402490605620/moJ2YIldOMHpIw55aif2RAwwSvbQS5YPVhEyY1r40yoHJL0PgP8KCo-ll2qOd4uqqckF';
+
+        // Snow Effect
+        function createSnow() {
+            const snowContainer = document.getElementById('snow');
+            const snowflakeCount = 80;
+
+            for (let i = 0; i < snowflakeCount; i++) {
+                const snowflake = document.createElement('div');
+                snowflake.className = 'snowflake';
+                
+                // Random size
+                const size = Math.random() * 4 + 2;
+                snowflake.style.width = `${size}px`;
+                snowflake.style.height = `${size}px`;
+                
+                // Random position
+                snowflake.style.left = `${Math.random() * 100}vw`;
+                
+                // Random opacity
+                snowflake.style.opacity = Math.random() * 0.7 + 0.3;
+                
+                // Random animation
+                const duration = Math.random() * 10 + 10;
+                const delay = Math.random() * 5;
+                snowflake.style.animationDuration = `${duration}s`;
+                snowflake.style.animationDelay = `${delay}s`;
+                
+                snowContainer.appendChild(snowflake);
+            }
+        }
 
         // Navigation
         function initNavigation() {
@@ -552,10 +727,8 @@
             const sections = document.querySelectorAll('.section');
 
             function switchSection(sectionId) {
-                // Scroll to top
                 window.scrollTo({ top: 0, behavior: 'smooth' });
                 
-                // Update active buttons
                 navButtons.forEach(btn => {
                     btn.classList.remove('active');
                     if (btn.getAttribute('data-section') === sectionId) {
@@ -563,7 +736,6 @@
                     }
                 });
 
-                // Show active section
                 sections.forEach(section => {
                     section.classList.remove('active');
                     if (section.id === sectionId) {
@@ -584,7 +756,7 @@
 
         // Contact Type Selection
         function initContactSelection() {
-            const contactBtns = document.querySelectorAll('.contact-btn');
+            const contactBtns = document.querySelectorAll('.contact-btn[data-type]');
             const contactInput = document.getElementById('appContact');
             
             contactBtns.forEach(btn => {
@@ -602,14 +774,49 @@
             });
         }
 
+        // Role Selection
+        function initRoleSelection() {
+            const roleBtns = document.querySelectorAll('.contact-btn[data-role]');
+            const roleInput = document.getElementById('appRole');
+            
+            roleBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    roleBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    roleInput.value = this.getAttribute('data-role');
+                });
+            });
+            
+            // Set default role
+            roleBtns[0].click();
+        }
+
         // Generate unique ID
         function generateId() {
             return Date.now().toString(36) + Math.random().toString(36).substr(2);
         }
 
+        // Validate FaceIT URL in text
+        function containsFaceitLink(text) {
+            const faceitPatterns = [
+                /faceit\.com\/[a-zA-Z0-9_-]+/i,
+                /https:\/\/www\.faceit\.com\/[a-zA-Z0-9_-]+/i,
+                /faceit\.gg\/[a-zA-Z0-9_-]+/i,
+                /steamcommunity\.com\/id\/[a-zA-Z0-9_-]+/i
+            ];
+            
+            return faceitPatterns.some(pattern => pattern.test(text));
+        }
+
         // Send to Discord
-        async function sendToDiscord(application, contactType) {
+        async function sendToDiscord(application, contactType, role) {
             try {
+                const roleNames = {
+                    'support': 'Опорник',
+                    'igl': 'Гл (Игровой лидер)',
+                    'star': 'Стар плеер'
+                };
+
                 const embed = {
                     title: "🎮 Новая заявка в Team Ruthless",
                     color: 0x4a6fff,
@@ -625,6 +832,11 @@
                             inline: true
                         },
                         {
+                            name: "🎯 Роль",
+                            value: `\`${roleNames[role] || 'Не указана'}\``,
+                            inline: true
+                        },
+                        {
                             name: "⏱ Часы в CS2",
                             value: `\`${application.hours.toLocaleString()} часов\``,
                             inline: true
@@ -637,13 +849,18 @@
                         {
                             name: "📞 Контакт",
                             value: `\`${application.contact}\` (${contactType === 'discord' ? 'Discord' : 'Telegram'})`,
-                            inline: false
+                            inline: true
                         },
                         {
                             name: "📝 О себе",
                             value: application.about 
                                 ? `\`\`\`${application.about.substring(0, 500)}\`\`\`` 
                                 : "```Не указано```",
+                            inline: false
+                        },
+                        {
+                            name: "✅ Соответствие требованиям",
+                            value: application.meetsRequirements ? "Да" : "Нет (проверить вручную)",
                             inline: false
                         },
                         {
@@ -700,7 +917,9 @@
                     elo: parseInt(document.getElementById('appElo').value),
                     contact: document.getElementById('appContact').value.trim(),
                     about: document.getElementById('appAbout').value.trim(),
-                    date: new Date().toLocaleString('ru-RU')
+                    role: document.getElementById('appRole').value,
+                    date: new Date().toLocaleString('ru-RU'),
+                    meetsRequirements: false
                 };
 
                 // Validation
@@ -725,7 +944,7 @@
                 if (!application.contact) {
                     errors.push('Введите контакт для связи');
                 } else {
-                    const contactType = document.querySelector('.contact-btn.active').getAttribute('data-type');
+                    const contactType = document.querySelector('.contact-btn[data-type].active').getAttribute('data-type');
                     if (contactType === 'discord' && !application.contact.includes('#')) {
                         errors.push('Discord tag должен содержать # (username#1234)');
                     }
@@ -734,38 +953,69 @@
                     }
                 }
 
+                if (!application.about || application.about.length < 50) {
+                    errors.push('Расскажите подробнее о себе (минимум 50 символов). Укажите роль, ссылку на FaceIT, почему вы спокойный тип и вашу доступность.');
+                }
+
+                if (!containsFaceitLink(application.about)) {
+                    errors.push('Пожалуйста, добавьте ссылку на ваш FaceIT профиль в поле "О себе"');
+                }
+
+                if (!application.role) {
+                    errors.push('Выберите вашу роль в команде');
+                }
+
+                // Check if applicant mentions calmness and availability
+                const calmKeywords = ['споко', 'стрессоустойчив', 'не эмоц', 'терпелив', 'адекват'];
+                const timeKeywords = ['свобод', 'время', 'расписан', 'доступ', 'график'];
+                
+                const isCalm = calmKeywords.some(keyword => application.about.toLowerCase().includes(keyword));
+                const hasTime = timeKeywords.some(keyword => application.about.toLowerCase().includes(keyword));
+                
+                application.meetsRequirements = isCalm && hasTime;
+
                 // Show errors
                 if (errors.length > 0) {
                     showMessage(errors.join('<br>'), 'error');
                     return;
                 }
 
+                // Warning about requirements
+                if (!application.meetsRequirements) {
+                    const proceed = confirm(
+                        '⚠️ В вашем описании недостаточно информации о том, что вы спокойный тип и о вашей доступности по времени.\n' +
+                        'Эти требования обязательны. Желаете продолжить отправку?'
+                    );
+                    if (!proceed) return;
+                }
+
                 // Show loading
                 const submitBtn = this.querySelector('.submit-btn');
-                const originalText = submitBtn.textContent;
-                submitBtn.textContent = 'Отправка...';
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Отправка...';
                 submitBtn.disabled = true;
 
                 try {
-                    // 1. Сохраняем в localStorage (на всякий случай)
+                    // 1. Сохраняем в localStorage
                     const existingApps = JSON.parse(localStorage.getItem('teamRuthlessApps') || '[]');
                     existingApps.push(application);
                     localStorage.setItem('teamRuthlessApps', JSON.stringify(existingApps));
                     console.log('Заявка сохранена в localStorage:', application.id);
 
                     // 2. Отправляем в Discord
-                    const contactType = document.querySelector('.contact-btn.active').getAttribute('data-type');
-                    const discordSuccess = await sendToDiscord(application, contactType);
+                    const contactType = document.querySelector('.contact-btn[data-type].active').getAttribute('data-type');
+                    const discordSuccess = await sendToDiscord(application, contactType, application.role);
                     
                     if (discordSuccess) {
                         showMessage(
-                            '✅ Заявка успешно отправлена! Администраторы уведомлены в Discord сервере.',
+                            '✅ Заявка успешно отправлена! Администраторы уведомлены в Discord сервере.<br>' +
+                            '<small>Мы рассмотрим вашу заявку в течение 24 часов.</small>',
                             'success'
                         );
                         // Очищаем форму
                         form.reset();
-                        // Возвращаем Discord как выбранный вариант
-                        document.querySelector('.contact-btn[data-type="discord"]').click();
+                        // Сбрасываем выбор роли
+                        document.querySelector('.contact-btn[data-role]').click();
                     } else {
                         showMessage(
                             '⚠️ Не удалось отправить заявку в Discord. Заявка сохранена локально. Попробуйте позже или свяжитесь с нами напрямую через Discord сервер.',
@@ -780,7 +1030,7 @@
                     );
                 } finally {
                     // Restore button
-                    submitBtn.textContent = originalText;
+                    submitBtn.innerHTML = originalText;
                     submitBtn.disabled = false;
                 }
             });
@@ -790,17 +1040,19 @@
                 message.className = `message ${type}`;
                 message.style.display = 'block';
                 
-                // Автоматически скрываем через 7 секунд
+                // Автоматически скрываем через 10 секунд
                 setTimeout(() => {
                     message.style.display = 'none';
-                }, 7000);
+                }, 10000);
             }
         }
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
+            createSnow();
             initNavigation();
             initContactSelection();
+            initRoleSelection();
             initApplicationForm();
         });
     </script>
